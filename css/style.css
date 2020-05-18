@@ -59,5 +59,11 @@ footer p{
     padding: 25px 50px;
 }
 #list{
-    padding: 50px 50px;
+    padding: 50px 50px 50px 50px;
+}
+table th{
+    padding-left: 20px;
+}
+table td{
+    padding-left: 20px;
 }
