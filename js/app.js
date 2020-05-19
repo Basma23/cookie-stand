@@ -1,9 +1,10 @@
 'use strict';
 var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12am',
-'1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
+    '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
 
 var sale = [];
-function Location(name, minCust, maxCust, average){
+
+function Location(name, minCust, maxCust, average) {
     this.name = name;
     this.minCust = minCust;
     this.maxCust = maxCust;
@@ -14,48 +15,61 @@ function Location(name, minCust, maxCust, average){
     sale.push(this);
 }
 Location.prototype.getHours = function () {
-    for(var i = 0; i < hours.length; i++){
+    for (var i = 0; i < hours.length; i++) {
         var custPerHur = getRandomVisitHours(this.minCust, this.maxCust);
         this.visitHours.push(custPerHur);
         // this.visitHours[i] = getRandomVisitHours(this.minCust, this.maxCust);
         console.table(this.visitHours);
     }
-}   
-Location.prototype.cookiesPerHour = function(){
-    for(var i = 0; i < hours.length; i++){
-        this.coPerHour[i] = Math.ceil(this.visitHours[i]*this.average);
+}
+Location.prototype.cookiesPerHour = function () {
+    for (var i = 0; i < hours.length; i++) {
+        this.coPerHour[i] = Math.ceil(this.visitHours[i] * this.average);
         this.total += this.coPerHour[i];
     }
 }
-Location.prototype.render = function () {
-    // console.log(document);
-    var container = document.getElementById('list');
-    // console.log(container);
-    // create table
-    var tabEl = document.createElement('table');
-    container.appendChild(tabEl);
+
+var container = document.getElementById('table');
+var tabEl = document.createElement('table');
+container.appendChild(tabEl);
+console.log(tabEl);
+
+function headerTab() {
     var hR = document.createElement('tr');
     tabEl.appendChild(hR);
     var thEl1 = document.createElement('th');
     hR.appendChild(thEl1);
     thEl1.textContent = 'Location/Time';
-    for(var i = 0; i < hours.length; i++){
+    for (var i = 0; i < hours.length; i++) {
         var thEl2 = document.createElement('th');
         hR.appendChild(thEl2);
         thEl2.textContent = hours[i];
     }
     var thEl3 = document.createElement('th');
     hR.appendChild(thEl3);
-    thEl3.textContent = 'Daily Location Total';
-    var hR1 = document.createElement('tr');
-    tabEl.appendChild(hR1);
-    var tdEl = document.createElement('td');
-    hR1.appendChild(tdEl);
-    tdEl.textContent = this.name;
-    console.log(tdEl)
+    thEl3.textContent = 'Daily Location Total ';
+}
+Location.prototype.render = function () {
+    // console.log(document);
+
+    // console.log(container);
+
+    var tR = document.createElement('tr');
+    tabEl.appendChild(tR);
+    tR.textContent = this.name;
+
+    for (var i = 0; i < hours.length; i++) {
+        var tD = document.createElement('td')
+        tR.appendChild(tD);
+        tD.textContent = this.coPerHour[i];
+
+    }
+    var tD = document.createElement('td')
+    tR.appendChild(tD);
+    tD.textContent = this.total;
 
 
-    
+
 
     // var header = document.createElement('h3');
     // container.appendChild(header);
@@ -71,6 +85,27 @@ Location.prototype.render = function () {
     // ulEl.appendChild(liEl1);
     // liEl1.textContent = 'Total: '+this.total+' cookies';
 }
+
+function footerTab() {
+    var tR = document.createElement('tr');
+    tabEl.appendChild(tR);
+    tR.textContent = 'Totals';
+    var totalDT = 0;
+    for (var i = 0; i < hours.length; i++) {
+        var totalPerHour = 0;
+        for (var j = 0; j < sale.length; j++) {
+            totalPerHour = totalPerHour + sale[j].coPerHour[i];
+            totalDT += sale[j].coPerHour[i];
+        }
+        var tD = document.createElement('td')
+        tR.appendChild(tD);
+        tD.textContent = totalPerHour;
+    }
+    var tD = document.createElement('td')
+    tR.appendChild(tD);
+    tD.textContent = totalDT;
+}
+
 function getRandomVisitHours(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -105,12 +140,14 @@ var lima = new Location(
     4.6
 );
 console.log(sale);
-for(var i=0; i<sale.length;i++) {
+headerTab();
+for (var i = 0; i < sale.length; i++) {
     sale[i].getHours();
     sale[i].cookiesPerHour();
     sale[i].render();
     console.log(sale[i].name);
-  }
+}
+footerTab();
 
 // Properties of each location are: name, min/max visit hours, average
 // var seattle = {
