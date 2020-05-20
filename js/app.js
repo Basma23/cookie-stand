@@ -85,6 +85,39 @@ Location.prototype.render = function () {
     // ulEl.appendChild(liEl1);
     // liEl1.textContent = 'Total: '+this.total+' cookies';
 }
+//Form to add new store
+var storeForm = document.getElementById('storeForm');
+storeForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    console.log(event);
+    var valueOfStoreName = event.target.storeName.value;
+    console.log(valueOfStoreName);
+    var valueOfMinHourCust = event.target.minHourCust.value;
+    console.log(valueOfMinHourCust);
+    var valueOfMaxHourCust = event.target.maxHourCust.value;
+    console.log(valueOfMaxHourCust);
+    var valueOfAverage = event.target.average.value;
+    console.log(valueOfAverage);
+    //(name, minCust, maxCust, average)
+    var newLocation = new Location(
+        valueOfStoreName, 
+        valueOfMinHourCust, 
+        valueOfMaxHourCust, 
+        valueOfAverage);
+    sale.push(newLocation);
+    console.log(sale);
+    for (var i = 0; i < sale.length; i++) {
+        sale[i].getHours();
+        sale[i].cookiesPerHour();
+        // sale[i].render();
+        console.log(sale[i].name);
+    }
+    tabEl.removeChild(tabEl.lastChild);
+    newLocation.render();  
+    
+    footerTab();
+     
+});
 
 function footerTab() {
     var tR = document.createElement('tr');
